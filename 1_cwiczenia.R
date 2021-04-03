@@ -9,3 +9,4 @@ getWeather <- GET(endpoint)
 weatherText <- content(getWeather, as="text")
 weatherJson <- fromJSON(weatherText)
 weatherDF <- as.data.frame(weatherJson)
+test <- 2
