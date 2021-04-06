@@ -108,6 +108,7 @@ df3 <-read.table("1_dane.csv",sep = ";", header = TRUE)
 df4 <-read.csv2("1_dane.csv")
 
 # Pętla
+i<-1
 
 for (i in 1:10){
   if(i==2){}
