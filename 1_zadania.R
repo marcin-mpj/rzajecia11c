@@ -79,16 +79,72 @@ print(cor(waga,wzrost))
 
 stworzDataFrame <- function(defRamka, ile = 1)
 {
+  defKolumny<-defRamka[[1]]
+  dl<-length(defKolumny)
+  df<-data.frame(matrix(ncol = dl, nrow = 0))
+  colnames(df) <- defKolumny
   
+  dl1 <- length(defRamka)
+  ileZaczytac <- min(ile+1,dl1)
+  for (i in 2:ileZaczytac){
+    df[nrow(df)+1,] <- defRamka [[i]]
+  }
   
-return(ile)  
+return(df)  
 }
 
-listaDane = list(list("kol1","kol2","kol3"),list("w1",2,3), list("w2",2,3),list("w3",3,4))
-listaDane [[1]][[1]]
-length(listaDane[[1]])
+#TEST
+listaDane = list(list("kol1","kol2","kol3"),list("w1",2,3), list("w2",2,3),list("w3",3,4),list("w4",2323,232))
+Ramka1 <- stworzDataFrame(listaDane)
+Ramka2 <- stworzDataFrame(listaDane,3)
+# Nie było zdefiniowanych danych wejściowych więć zrobiłem to za pomocą listy list. 
 
 
-stworzDataFrame(2)
-df<-data.frame(index=1:3, imie=c("jan","alina","bartek"), plec=c("M","K","M"))
+#5 Napisz funkcję , która pobiera sciezkeKatalogu, nazweKolumny, jakaFunkcje, DlaIluPlikow i liczy: 
+#mean, median,min,max w zależności od podanej nazwy funkcji w argumencie, 
+#z katologu który podaliśmy i z tylu plików ilu podaliśmy dla wybranej nazwy kolumny. 
+
+liczZplikow <- function(sciezka , nazwaKolumny, jakaFunkcja="mean", DlaIluPlikow=1)
+{
+  listaPlikow <- list.files(sciezka)
+  wynik  = list()
+  
+  for (i in 1:DlaIluPlikow){
+    wybranyPlik <- listaPlikow[i]
+    plikDane <-read.csv( paste( sciezka , wybranyPlik, sep="/"))
+    filtrKolumny <-  paste("X",nazwaKolumny, sep = "")
+    kolumnaDoAnalizy  <- plikDane[,filtrKolumny]
+    kolumnaDoAnalizy <-as.numeric(kolumnaDoAnalizy)
+    if (jakaFunkcja=="mean"){Obliczenia <- mean(kolumnaDoAnalizy, na.rm = TRUE)}
+    if (jakaFunkcja=="median"){Obliczenia <- median(kolumnaDoAnalizy, na.rm = TRUE)}
+    if (jakaFunkcja=="min"){Obliczenia <- min(kolumnaDoAnalizy, na.rm = TRUE)}
+    if (jakaFunkcja=="max"){Obliczenia <- max(kolumnaDoAnalizy, na.rm = TRUE)}
+    wynik1 = list(wybranyPlik, nazwaKolumny , jakaFunkcja, Obliczenia )
+    wynik = c(wynik,wynik1)
+  }
+
+  return(wynik)
+}
+
+#TEST Funkcja działa z domyślną ścieżką głoWną
+Wynik1 <- liczZplikow("smogKrakow","142_pm1","mean",1)
+print(Wynik1)
+
+Wynik2 <- liczZplikow("smogKrakow","172_pressure","median",2)
+print(Wynik2)
+
+Wynik3 <- liczZplikow("smogKrakow","174_humidity","min",3)
+print(Wynik3)
+
+Wynik4 <- liczZplikow("smogKrakow","182_pm1","max",4)
+print(Wynik4)
+
+Wynik5 <- liczZplikow("smogKrakow","183_temperature","median",5)
+print(Wynik5)
+
+
+
+
+
+
 
